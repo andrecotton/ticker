@@ -1,5 +1,3 @@
-// Using a publicly available CORS proxy
-const CORS_PROXY = "https://cors-anywhere.herokuapp.com/";
 const feeds = [
     "https://www.reddit.com/r/technology+worldnews+europe+foodforthought+foodnews+formula1+news+stocks.rss?limit=75", // Reddit technology for key 1
     "https://www.reddit.com/r/worldnews.rss?limit=75", // Placeholder URL for feed 2
@@ -16,7 +14,7 @@ var tickerElement = document.getElementById('ticker');
 function fetchFeed(feedIndex) {
     const now = new Date().getTime(); // Cache buster
     const RSS_URL = feeds[feedIndex] + "&t=" + now; // Append cache buster
-    fetch(`${CORS_PROXY}${RSS_URL}`)
+    fetch(`${RSS_URL}`)
       .then(response => response.text())
       .then(str => new window.DOMParser().parseFromString(str, "text/xml"))
       .then(data => {
@@ -134,7 +132,7 @@ document.addEventListener('keydown', function(event) {
 function fetchCustomFeed(newRssUrl) {
     const now = new Date().getTime(); // Cache buster
     const RSS_URL = newRssUrl + "&t=" + now; // Append cache buster
-    fetch(`${CORS_PROXY}${RSS_URL}`)
+    fetch(`${RSS_URL}`)
       .then(response => response.text())
       .then(str => new window.DOMParser().parseFromString(str, "text/xml"))
       .then(data => {
