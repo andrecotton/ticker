@@ -193,6 +193,8 @@ a {
 </div>
 
 <div id="control-buttons">
+    <button id="move-up-button">Up</button>
+    <button id="move-down-button">Down</button>
     <button id="pause-button">Pause</button>
     <button id="play-button" style="display:none;">Play</button>
 </div>
@@ -506,6 +508,9 @@ function updateTickerPosition() {
     // Optionally, restart the animation after a delay
     setTimeout(() => animateTicker(), 1000); // Restart the animation with a slight delay
 }
+
+document.getElementById('move-up-button').addEventListener('click', moveBackward);
+document.getElementById('move-down-button').addEventListener('click', moveForward);
 
 </script>
 
