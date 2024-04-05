@@ -153,6 +153,19 @@ a {
     <button onclick="toggleDarkMode()">Toggle Light/Dark Mode</button>
     <button onclick="increaseFontSize()">Increase Font Size</button>
     <button onclick="decreaseFontSize()">Decrease Font Size</button>
+    <hr>
+    <div>Categories:</div>
+    <label><input type="checkbox" class="category" value="news" checked> News</label><br>
+    <label><input type="checkbox" class="category" value="technology" checked> Technology</label><br>
+    <label><input type="checkbox" class="category" value="worldnews" checked> World News</label><br>
+    <label><input type="checkbox" class="category" value="europe"> Europe</label><br>
+    <label><input type="checkbox" class="category" value="foodforthought"> Food for Thought</label><br>
+    <label><input type="checkbox" class="category" value="foodnews"> Food News</label><br>
+    <label><input type="checkbox" class="category" value="formula1"> Formula 1</label><br>
+    <label><input type="checkbox" class="category" value="stocks"> Stocks</label><br>
+    <label><input type="checkbox" class="category" value="noticias_en_espanol"> Noticias en Español</label><br>
+    <label><input type="checkbox" class="category" value="upliftingnews+goodnews+positive_news"> Good News :)</label><br>
+    <!-- Add other categories as needed -->
 </div>
 
 <div class="ticker-wrap">
@@ -168,8 +181,8 @@ a {
 // Using a publicly available CORS proxy
 const CORS_PROXY = "https://cors-anywhere.herokuapp.com/";
 const feeds = [
-    "https://www.reddit.com/r/technology+worldnews+europe+foodforthought+foodnews+formula1+news+stocks.rss?limit=75", // Reddit technology for key 1
-    "https://www.reddit.com/r/worldnews.rss?limit=75", // Placeholder URL for feed 2
+    "https://www.reddit.com/r/technology+worldnews+europe+foodforthought+foodnews+formula1+news+stocks.rss?limit=100", // Reddit technology for key 1
+    "https://www.reddit.com/r/worldnews.rss?limit=100", // Placeholder URL for feed 2
     "https://example.com/rss/feed3", // Add your actual feed URLs for keys 2-9
     "https://example.com/rss/feed4",
     "https://example.com/rss/feed5",
@@ -181,10 +194,19 @@ const feeds = [
 var tickerElement = document.getElementById('ticker');
 
 function fetchFeed(feedIndex) {
+    // Construct the base RSS URL dynamically based on selected categories
+    let baseRSS = "https://www.reddit.com/r/";
+    const selectedCategories = document.querySelectorAll('.category:checked');
+    let categoryString = '';
+    selectedCategories.forEach((checkbox, index) => {
+        categoryString += checkbox.value + (index < selectedCategories.length - 1 ? '+' : '');
+    });
+
     const now = new Date().getTime(); // Cache buster
-    const RSS_URL = feeds[feedIndex] + "&t=" + now; // Append cache buster
+    const RSS_URL = baseRSS + categoryString + ".rss?limit=99&t=" + now; // Append selected categories and cache buster
+
     fetch(`${CORS_PROXY}${RSS_URL}`)
-      .then(response => response.text())
+        .then(response => response.text())
       .then(str => new window.DOMParser().parseFromString(str, "text/xml"))
       .then(data => {
         const entries = data.querySelectorAll("entry");
@@ -412,6 +434,10 @@ function decreaseSpeed() {
     ticker.style.animationDuration = `${currentDuration + 5}s`;
 }
 
+// Listen for changes in category selection and refetch the feed
+document.querySelectorAll('.category').forEach(checkbox => {
+    checkbox.addEventListener('change', () => fetchFeed(0)); // Assuming feedIndex 0 is for the dynamic category feed
+});
 
 </script>
 
