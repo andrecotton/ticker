@@ -198,6 +198,10 @@ a {
 </div>
 
 <script>
+
+let touchStartY = 0;
+let touchEndY = 0;
+
 // Using a publicly available CORS proxy
 const CORS_PROXY = "https://cors-anywhere.herokuapp.com/";
 const feeds = [
@@ -458,6 +462,50 @@ function decreaseSpeed() {
 document.querySelectorAll('.category').forEach(checkbox => {
     checkbox.addEventListener('change', () => fetchFeed(0)); // Assuming feedIndex 0 is for the dynamic category feed
 });
+
+document.querySelector('.ticker-wrap').addEventListener('touchstart', function(e) {
+    touchStartY = e.touches[0].clientY;
+}, false);
+
+document.querySelector('.ticker-wrap').addEventListener('touchend', function(e) {
+    touchEndY = e.changedTouches[0].clientY;
+    handleTouchMove();
+}, false);
+
+function handleTouchMove() {
+    if (touchEndY < touchStartY) {
+        moveForward();
+    }
+    if (touchEndY > touchStartY) {
+        moveBackward();
+    }
+}
+
+function moveForward() {
+    // Guard clause to prevent moving forward past the last item
+    if (currentIndex >= document.querySelectorAll('.ticker__item').length) return;
+    
+    currentIndex++; // Move to next item
+    updateTickerPosition(); // Update position immediately
+}
+
+function moveBackward() {
+    // Guard clause to prevent moving backward before the first item
+    if (currentIndex <= 1) return;
+    
+    currentIndex--; // Move to previous item
+    updateTickerPosition(); // Update position immediately
+}
+
+function updateTickerPosition() {
+    clearInterval(animationInterval); // Stop the automatic animation
+    const items = document.querySelectorAll('.ticker__item');
+    const translateYValue = -(currentIndex - 1) * items[0].clientHeight;
+    tickerElement.style.transition = 'transform 0.7s cubic-bezier(0.4, 0.0, 0.2, 1)';
+    tickerElement.style.transform = `translateY(${translateYValue}px)`;
+    // Optionally, restart the animation after a delay
+    setTimeout(() => animateTicker(), 1000); // Restart the animation with a slight delay
+}
 
 </script>
 
