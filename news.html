@@ -64,7 +64,7 @@ body {
             justify-content: center;
             align-items: center;
             height: 100vh;
-	background-color: #ddd;
+	background-color: #D5E9F3;
         }
 
 	strong {
@@ -76,10 +76,10 @@ body {
 	}
 
         .ticker-wrap {
-            overflow: hidden;
+/*            overflow: hidden;*/
             width: 90%;
             height: 30rem;
-            background-color: #ddd;
+            background-color: #D5E9F3;
 	    color: #373737;
             position: relative;
             display: flex;
@@ -101,9 +101,9 @@ body {
     overflow: hidden;
     padding: 20px;
     font-family: "Spline Sans", sans-serif;
-
+height: 30rem;
     /* Layout adjustments for the ticker */
-    display: block; /* Changed from flex to block */
+    display: flex; /* Changed from flex to block */
     width: auto; /* Adjust width as needed */
     margin-bottom: 2rem; /* Space between cards */
 }
@@ -113,7 +113,6 @@ body {
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 10rem; /* Adjust number of lines based on your design */
-    margin-bottom: 0.5rem; /* Space between content and source link */
 }
 
 a {
@@ -199,23 +198,7 @@ a {
     color: white;
 }
 
-.cards {
-	display: flex;
-	flex-wrap: wrap;
-	align-items: flex-start;
-	flex-wrap: wrap;
-	justify-content: center;
-	gap: 2.5rem;
-	width: 90%;
-	max-width: 1000px;
-	margin: 10vh auto;
-}
 
-.card {
-	border-radius: 16px;
-	box-shadow: 0 30px 30px -25px rgba(#4133B7, .25);
-	max-width: 300px;
-}
 
 .information {
 	background-color: var(--c-white);
@@ -223,7 +206,7 @@ a {
 
 	.tag {
 		display: inline-block;
-		background-color: var(--c-titan-white);
+		background-color: #f1eeff;
 		color: var(--c-indigo);
 		font-weight: 600;
 		font-size: 0.875rem;
@@ -401,15 +384,19 @@ a {
 		}
 	}
 	
-	
+
 }
+
+
 
 </style>
 </head>
 <body>
 
+<div id="header">
 <div id="settings-button" onclick="toggleSettingsMenu()">
     &#9776; <!-- Represents the three horizontal lines -->
+</div>
 </div>
 
 <div id="settings-menu"><br><br>
@@ -435,11 +422,13 @@ a {
   <div class="ticker" id="ticker"></div>
 </div>
 
+<div id="footer">
 <div id="control-buttons">
     <button id="move-up-button">&#11014;</button>
     <button id="move-down-button">&#11015;</button>
     <button id="pause-button">&#9208;&#65039;</button>
     <button id="play-button" style="display:none;">&#9654;&#65039;</button>
+</div>
 </div>
 
 <script>
@@ -517,26 +506,42 @@ let isPaused = false;
 function animateTicker() {
     const items = document.querySelectorAll('.ticker__item');
     let currentIndex = 0;
-    let currentTranslateY = 0;
 
-    // Define the function to move the ticker up
     const moveUp = () => {
         if (currentIndex < items.length) {
-            currentTranslateY = -(currentIndex * items[0].clientHeight);
-            tickerElement.style.transform = `translateY(${currentTranslateY}px)`;
+            const nextItemHeight = getNextItemHeight(items, currentIndex);
+            const currentTranslateY = calculateTotalHeight(items, currentIndex);
+            tickerElement.style.transform = `translateY(-${currentTranslateY}px)`;
             tickerElement.style.transition = `transform 0.7s cubic-bezier(0.4, 0.0, 0.2, 1)`;
             currentIndex++;
         } else {
+            // Reset animation without seeing the transition
             tickerElement.style.transition = 'none';
             tickerElement.style.transform = `translateY(0)`;
             tickerElement.offsetHeight; // Trigger reflow
-            currentIndex = 1;
+            currentIndex = 1; // Set to start from the second item next interval
         }
     };
 
-    clearInterval(animationInterval); // Clear any existing interval
-    animationInterval = setInterval(moveUp, 6000); // Adjust time as necessary
+    clearInterval(animationInterval);
+    animationInterval = setInterval(moveUp, 6000);
 }
+
+function calculateTotalHeight(items, index) {
+    let totalHeight = 0;
+    for (let i = 0; i <= index; i++) {
+        totalHeight += items[i].clientHeight + (i < index ? parseInt(window.getComputedStyle(items[i]).marginBottom) : 0);
+    }
+    return totalHeight;
+}
+
+function getNextItemHeight(items, currentIndex) {
+    if (currentIndex + 1 < items.length) {
+        return items[currentIndex + 1].clientHeight;
+    }
+    return 0;
+}
+
 
 function pauseAnimation() {
     clearInterval(animationInterval);
@@ -646,7 +651,7 @@ function fetchCustomFeed(newRssUrl) {
       });
 
       // Format: BOLD CATEGORY TERM | Title. (Source)
-      html += `<div class="ticker__item"><span class="tag">${categoryTerm}</span><h2 class="title">${title}</h2><p class="info">Description or summary here. Click to read more.</p><a href="${directLink}" target="_blank" class="button"><span>Learn more</span><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="none"><path d="M0 0h24v24H0V0z" fill="none" /><path d="M16.01 11H4v2h12.01v3L20 12l-3.99-4v3z" fill="currentColor" /></svg></a></div>`;
+      html += `<div class="ticker__item"><article class="information [ card ]"><span class="tag">${categoryTerm}</span><h2 class="title">${title}</h2><p class="info"></p><button class="button"><span><a href="${directLink}" target="_blank">Read more at ${sourceName}</a></span></button></article></div>`;
     });
     tickerElement.innerHTML = html; // Insert the formatted HTML into the ticker element
         animateTicker();
