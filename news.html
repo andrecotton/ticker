@@ -400,22 +400,9 @@ a {
 </div>
 
 <div id="settings-menu"><br><br>
-    <button onclick="toggleDarkMode()">Toggle Light/Dark Mode</button>
-    <button onclick="increaseFontSize()">Increase Font Size</button>
-    <button onclick="decreaseFontSize()">Decrease Font Size</button>
-    <hr>
-    <div>Categories:</div>
-    <label><input type="checkbox" class="category" value="news" checked> News</label><br>
-    <label><input type="checkbox" class="category" value="technology" checked> Technology</label><br>
-    <label><input type="checkbox" class="category" value="worldnews" checked> World News</label><br>
-    <label><input type="checkbox" class="category" value="europe"> Europe</label><br>
-    <label><input type="checkbox" class="category" value="foodforthought"> Food for Thought</label><br>
-    <label><input type="checkbox" class="category" value="foodnews"> Food News</label><br>
-    <label><input type="checkbox" class="category" value="formula1"> Formula 1</label><br>
-    <label><input type="checkbox" class="category" value="stocks"> Stocks</label><br>
-    <label><input type="checkbox" class="category" value="noticias_en_espanol"> Noticias en Español</label><br>
-    <label><input type="checkbox" class="category" value="upliftingnews+goodnews+positive_news"> Good News :)</label><br>
-    <!-- Add other categories as needed -->
+    <strong>Select News Feeds</strong>
+    <div id="feed-selectors"></div>
+    <button onclick="fetchSelectedFeeds()">Refresh Feeds</button>
 </div>
 
 <div class="ticker-wrap">
@@ -439,66 +426,50 @@ let touchEndY = 0;
 // Using a publicly available CORS proxy
 const CORS_PROXY = "https://cors-anywhere.herokuapp.com/";
 const feeds = [
-    "https://www.reddit.com/r/technology+worldnews+europe+foodforthought+foodnews+formula1+news+stocks.rss?limit=100", // Reddit technology for key 1
-    "https://www.reddit.com/r/worldnews.rss?limit=100", // Placeholder URL for feed 2
-    "https://example.com/rss/feed3", // Add your actual feed URLs for keys 2-9
-    "https://example.com/rss/feed4",
-    "https://example.com/rss/feed5",
-    "https://example.com/rss/feed6",
-    "https://example.com/rss/feed7",
-    "https://example.com/rss/feed8",
-    "https://example.com/rss/feed9"
+    { url: "https://feeds.bbci.co.uk/news/world/rss.xml", name: "BBC World" },
+    { url: "https://www.nytimes.com/svc/collections/v1/publish/http://www.nytimes.com/section/world/rss.xml", name: "NY Times World" },
+    { url: "https://feeds.skynews.com/feeds/rss/world.xml", name: "Sky News World" }
 ];
+
+document.getElementById('feed-selectors').innerHTML = feeds.map((feed, index) =>
+    `<label><input type="checkbox" class="feed-checkbox" checked data-feed="${feed.url}" id="feed${index}"> ${feed.name}</label><br>`
+).join('');
+
 var tickerElement = document.getElementById('ticker');
 
-function fetchFeed(feedIndex) {
-    // Construct the base RSS URL dynamically based on selected categories
-    let baseRSS = "https://www.reddit.com/r/";
-    const selectedCategories = document.querySelectorAll('.category:checked');
-    let categoryString = '';
-    selectedCategories.forEach((checkbox, index) => {
-        categoryString += checkbox.value + (index < selectedCategories.length - 1 ? '+' : '');
-    });
-
-    const now = new Date().getTime(); // Cache buster
-    const RSS_URL = baseRSS + categoryString + ".rss?limit=99&t=" + now; // Append selected categories and cache buster
-
-    fetch(`${CORS_PROXY}${RSS_URL}`)
+function fetchFeed(url) {
+    const CORS_PROXY = "https://cors-anywhere.herokuapp.com/";
+    return fetch(`${CORS_PROXY}${url}`)
         .then(response => response.text())
-      .then(str => new window.DOMParser().parseFromString(str, "text/xml"))
-      .then(data => {
-        const entries = data.querySelectorAll("entry");
-        let html = '';
-        entries.forEach(entry => {
-      // Extract the category term, make it uppercase and bold
-      const categoryTerm = entry.querySelector("category").getAttribute("term").toUpperCase();
-      const title = entry.querySelector("title").textContent;
-      const contentHtml = entry.querySelector("content").textContent;
-      const parser = new DOMParser();
-      const htmlDoc = parser.parseFromString(contentHtml, 'text/html');
-      const links = htmlDoc.querySelectorAll("a");
-      
-      let directLink = '';
-      let sourceName = 'Source';
-      Array.from(links).forEach(link => {
-        const href = link.getAttribute('href');
-        if (href && !href.includes('reddit.com')) {
-          directLink = href;
-          const url = new URL(href);
-          sourceName = url.hostname.replace('www.', ''); // Extract hostname without 'www'
-          return;
-        }
-      });
-
-      // Format: BOLD CATEGORY TERM | Title. (Source)
-      html += `<div class="ticker__item"><article class="information [ card ]"><span class="tag">${categoryTerm}</span><h2 class="title">${title}</h2><p class="info"></p><button class="button"><span><a href="${directLink}" target="_blank">Read more at ${sourceName}</a></span></button></article></div>`;
-    });
-    tickerElement.innerHTML = html; // Insert the formatted HTML into the ticker element
-        animateTicker();
-
-  })
-  .catch(error => console.error('Error fetching or processing the RSS feed:', error));
+        .then(str => new window.DOMParser().parseFromString(str, "application/xml"));
 }
+
+function displayFeeds() {
+    const selectedFeeds = Array.from(document.querySelectorAll('.feed-checkbox:checked')).map(checkbox => ({
+        url: checkbox.getAttribute('data-feed'),
+        name: checkbox.nextSibling.textContent.trim()
+    }));
+    const feedPromises = selectedFeeds.map(feed => fetchFeed(feed.url).then(data => ({ data, name: feed.name })));
+
+    Promise.all(feedPromises).then(results => {
+        let itemsHtml = results.flatMap(result => [...result.data.querySelectorAll('item')].map(item => {
+            const title = item.querySelector('title').textContent;
+            const link = item.querySelector('link').textContent;
+            const description = item.querySelector('description').textContent;
+            return `<div class="ticker__item"><article class="information [ card ]"><span class="tag">${result.name}</span><h2 class="title">${title}</h2><p class="info">${description}</p><button class="button"><span><a href="${link}" target="_blank">Read more</a></span></button></article></div>`;
+        })).join('');
+
+        document.getElementById('ticker').innerHTML = itemsHtml;
+        animateTicker();
+    }).catch(err => console.error('Error fetching or processing the RSS feeds:', err));
+}
+
+function fetchSelectedFeeds() {
+    displayFeeds(); // Initially load selected feeds
+}
+
+// Initial fetch
+fetchSelectedFeeds();
 
 let animationInterval;
 let isPaused = false;
