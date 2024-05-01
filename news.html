@@ -1,76 +1,101 @@
 <!DOCTYPE html>
 <html>
 <head>
+
 <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
-<meta name="apple-mobile-web-app-capable" content="yes" />
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<link rel="apple-touch-icon" href="icon.png"/>
-<link rel="apple-touch-startup-image" href="startup.png"/>
-<title>Buenas</title>
-<style>
+<meta name="apple-mobile-web-app-capable" content="yes" /> <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="apple-touch-icon" href="icon.png"/> <link rel="apple-touch-startup-image" href="startup.png" />
+
+    <title>Buenas</title>
+    <style>
 @import url("https://fonts.googleapis.com/css2?family=Spline+Sans:wght@300;400;500;600;700&display=swap");
 
 *,
 *:after,
 *:before {
-    box-sizing: border-box;
+	box-sizing: border-box;
 }
 
 :root {
-    --c-white: #fff;
-    --c-black: #000;
-    --c-ash: #eaeef6;
-    --c-charcoal: #a0a0a0;
-    --c-void: #141b22;
-    --c-fair-pink: #FFEDEC;
-    --c-apricot: #FBC8BE;
-    --c-coffee: #754D42;
-    --c-del-rio: #917072;
-    --c-java: #1FCAC5;
-    --c-titan-white: #f1eeff;
-    --c-cold-purple: #a69fd6;
-    --c-indigo: #6558d3;
-    --c-governor: #4133B7;
+	// Basic
+	--c-white: #fff;
+	--c-black: #000;
+
+	// Greys
+	--c-ash: #eaeef6;
+	--c-charcoal: #a0a0a0;
+	--c-void: #141b22;
+
+	// Beige/Browns
+	--c-fair-pink: #FFEDEC;
+	--c-apricot: #FBC8BE;
+	--c-coffee: #754D42;
+	--c-del-rio: #917072;
+
+	// Greens
+	--c-java: #1FCAC5;
+
+	// Purples
+	--c-titan-white: #f1eeff;
+	--c-cold-purple: #a69fd6;
+	--c-indigo: #6558d3;
+	--c-governor: #4133B7;
 }
 
 body {
-    font-family: "Spline Sans", sans-serif;
-    margin: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: var(--c-white);
-}
+	font-family: "Spline Sans";
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+	background-color: #ffffff;
+        }
 
-.ticker-wrap {
-    width: 90%;
-    height: 30rem;
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-}
+	strong {
+	    color: #2257da;
+	}
 
+	a {
+	    text-decoration: none;
+      color: #2257da;
+      &:hover,
+  		&:focus {
+  			color: #fff;
+      }
+	}
+
+        .ticker-wrap {
+/*            overflow: hidden;*/
+            width: 90%;
+            height: 30rem;
+            background-color: #ffffff;
+	    color: #373737;
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .ticker {
+            position: absolute;
+            width: 100%;
+        }
+
+/* Card styling adapted for ticker items */
 .ticker__item {
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 90%;
-    height: 90%;
-    background-color: var(--c-white);
+    position: relative;
+    background-color: #fff; /* Fallback background color */
     border-radius: 16px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     margin: 1rem;
+    overflow: hidden;
     padding: 20px;
+    font-family: "Spline Sans", sans-serif;
+    height: 30rem;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    transition: transform 0.3s ease-in-out;
-    cursor: grab;
-    z-index: 1; /* Ensure it is interactive and on top */
+    width: auto;
+    margin-bottom: 2rem;
 }
 
 .background-image {
@@ -83,14 +108,42 @@ body {
     background-repeat: no-repeat;
     background-position: center;
     filter: blur(1px) grayscale(100%) opacity(20%);
-    z-index: 0;
+    z-index: 0; /* Ensure it's behind the content */
 }
 
 .ticker__item-content {
     position: relative;
-    z-index: 2;
+    z-index: 2; /* Higher than the background to ensure content is not affected by the filter */
     width: 100%;
 }
+
+
+
+a {
+    align-self: left; /* Ensure link is always visible and left */
+}
+
+        /* Adjusted for dark mode readability */
+        .dark-mode {
+          background-color: black !important;
+        }
+
+        .dark-mode .ticker__item,
+        .dark-mode .ticker__item a,
+        .dark-mode .ticker__item strong,
+        .dark-mode .ticker-wrap {
+          color: white !important;
+          background-color: black !important;
+        }
+
+        .dark-mode .ticker__item strong {
+          color: red !important;
+        }
+
+        .dark-mode .ticker__item a {
+          color: red !important;
+        }
+
 
 #settings-button {
     position: fixed;
@@ -98,85 +151,100 @@ body {
     right: 20px;
     font-size: 1.5rem;
     cursor: pointer;
-    z-index: 1001;
+    z-index: 1001; /* Ensure it's above other elements */
 }
 
 #settings-menu {
     position: fixed;
     top: 0;
-    right: -250px;
+    right: -250px; /* Start off-screen */
     width: 250px;
     height: 100%;
-    background-color: #3a6be3;
-    color: white;
+    background-color: #3a6be3; /* Blue background */
+    color: white; /* White text */
     transition: right 0.5s;
     display: flex;
     flex-direction: column;
     padding: 20px;
     box-sizing: border-box;
-    z-index: 1000;
+    z-index: 1000; /* Ensure it's above other content but below the button */
 }
 
 #settings-menu button {
     margin: 10px 0;
     padding: 10px;
     background-color: white;
-    color: #3a6be3;
+    color: #3a6be3; /* Blue text to match the menu background */
     border: none;
     cursor: pointer;
 }
 
 .information {
-    position: relative;
-    z-index: 2;
-    background-color: var(--c-white);
-    padding: 1.5rem;
+  position: relative;
+  		z-index: 2;
+	background-color: var(--c-white);
+	padding: 1.5rem;
+	position: relative;
+	overflow: hidden; /* Ensures the background does not spill outside the boundaries of the card */
 }
 
-.tag, .title, .info, .button {
-    position: relative;
-    z-index: 2;
+	.tag {
+		position: relative;
+		z-index: 2;
+		display: inline-block;
+		background-color: #2257da;
+		color: #ffffff;
+		font-weight: 600;
+		font-size: 0.875rem;
+		padding: 0.5em 0.75em;
+		line-height: 1;
+		border-radius: 6px;
+	}
+
+	.title, .info, .button {
+		position: relative;
+		z-index: 2;
+	}
+
+	.title {
+		font-size: 1.5rem;
+		color: var(--c-void);
+		line-height: 1.25;
+	}
+
+	.info {
+		color: #000;
+	}
+
+	.button {
+		font: inherit;
+		line-height: 1;
+		background-color: #ffffff;
+		border: 2px solid #2257da;
+		color: #2257da;
+		padding: 0.5em 1em;
+		border-radius: 6px;
+		font-weight: 500;
+		display: inline-flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 0.5rem;
+	}
 }
 
-.tag {
-    display: inline-block;
-    background-color: #2257da;
-    color: white;
-    font-weight: 600;
-    font-size: 0.875rem;
-    padding: 0.5em 0.75em;
-    line-height: 1;
-    border-radius: 6px;
-}
 
-.title {
-    font-size: 1.5rem;
-    color: var(--c-void);
-    line-height: 1.25;
-}
 
-.button {
-    font: inherit;
-    line-height: 1;
-    background-color: #ffffff;
-    border: 2px solid #2257da;
-    color: #2257da;
-    padding: 0.5em 1em;
-    border-radius: 6px;
-    font-weight: 500;
-    display: inline-flex;
-    align-items: center;
-    justify-content: space-between;
-}
 </style>
 </head>
 <body>
 
 <div id="header">
-    <div id="settings-button" onclick="toggleSettingsMenu()">&#9776;</div>
+<div id="settings-button" onclick="toggleSettingsMenu()">
+    &#9776; <!-- Represents the three horizontal lines -->
+</div>
 </div>
 
-<div id="settings-menu">
+<div id="settings-menu"><br><br>
     <button onclick="toggleDarkMode()">Toggle Light/Dark Mode</button>
     <button onclick="increaseFontSize()">Increase Font Size</button>
     <button onclick="decreaseFontSize()">Decrease Font Size</button>
@@ -192,19 +260,17 @@ body {
     <label><input type="checkbox" class="category" value="stocks"> Stocks</label><br>
     <label><input type="checkbox" class="category" value="noticias_en_espanol"> Noticias en Español</label><br>
     <label><input type="checkbox" class="category" value="upliftingnews+goodnews+positive_news"> Good News :)</label><br>
+    <!-- Add other categories as needed -->
 </div>
 
 <div class="ticker-wrap">
-    <div class="ticker" id="ticker"></div>
+  <div class="ticker" id="ticker"></div>
 </div>
 
-<div id="footer"></div>
+<div id="footer">
+</div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js"></script>
 <script>
-// JavaScript for fetching and displaying RSS feeds, adjusting settings, and swipe functionality
-
-var touchStartY, touchEndY;
 
 // Using a publicly available CORS proxy
 const CORS_PROXY = "https://cors-anywhere.herokuapp.com/";
@@ -315,52 +381,31 @@ function fetchCustomFeed(newRssUrl) {
         const entries = data.querySelectorAll("entry");
         let html = '';
         entries.forEach(entry => {
-            // Extract the category term, make it uppercase and bold
-            const categoryTerm = entry.querySelector("category").getAttribute("term").toUpperCase();
-            const title = entry.querySelector("title").textContent;
-            const contentHtml = entry.querySelector("content").textContent;
-            const publishedDate = entry.querySelector("published").textContent; // Getting the published date
-            const parser = new DOMParser();
-            const htmlDoc = parser.parseFromString(contentHtml, 'text/html');
+      // Extract the category term, make it uppercase and bold
+      const categoryTerm = entry.querySelector("category").getAttribute("term").toUpperCase();
+      const title = entry.querySelector("title").textContent;
+      const contentHtml = entry.querySelector("content").textContent;
+      const parser = new DOMParser();
+      const htmlDoc = parser.parseFromString(contentHtml, 'text/html');
+      const links = htmlDoc.querySelectorAll("a");
 
-            // Extract image URL from the content
-            const img = htmlDoc.querySelector('img');
-            const imgUrl = img ? img.src : '';
+      let directLink = '';
+      let sourceName = 'Source';
+      Array.from(links).forEach(link => {
+        const href = link.getAttribute('href');
+        if (href && !href.includes('reddit.com')) {
+          directLink = href;
+          const url = new URL(href);
+          sourceName = url.hostname.replace('www.', ''); // Extract hostname without 'www'
+          return;
+        }
+      });
 
-            const links = htmlDoc.querySelectorAll("a");
-            let directLink = '';
-            let sourceName = 'Source';
-            Array.from(links).forEach(link => {
-                const href = link.getAttribute('href');
-                if (href && !href.includes('reddit.com')) {
-                    directLink = href;
-                    const url = new URL(href);
-                    sourceName = url.hostname.replace('www.', ''); // Extract hostname without 'www'
-                    sourceName = sourceName.toUpperCase();
-                    return;
-                }
-            });
-
-            // Append to HTML with image if available
-            html += `
-            <div class="ticker__item">
-                <div class="background-image" style="background-image: url('${imgUrl}');"></div>
-                <article class="information [ card ]">
-                    <span class="tag">${categoryTerm}</span>
-                    <p class="info">${new Date(publishedDate).toLocaleDateString()} - ${sourceName}</p>
-                    <h2 class="title">${title}</h2>
-                    <button class="button">
-                        <span>
-                            <a href="${directLink}" target="_blank">Read more</a>
-                        </span>
-                    </button>
-                </article>
-            </div>
-            `;
-
-          });
-        tickerElement.innerHTML = html; // Insert the formatted HTML into the ticker element
-    })
+      // Format: BOLD CATEGORY TERM | Title. (Source)
+      html += `<div class="ticker__item"><article class="information [ card ]"><span class="tag">${categoryTerm}</span><h2 class="title">${title}</h2><p class="info"></p><button class="button"><span><a href="${directLink}" target="_blank">Read more at ${sourceName}</a></span></button></article></div>`;
+    });
+    tickerElement.innerHTML = html; // Insert the formatted HTML into the ticker element
+  })
   .catch(error => console.error('Error fetching or processing the RSS feed:', error));
 }
 
@@ -415,8 +460,13 @@ document.querySelector('.ticker-wrap').addEventListener('touchend', function(e) 
     handleTouchMove();
 }, false);
 
-// Swipe functionality for cards
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js"></script>
+
+<script>
 var swipeAreas = document.querySelectorAll('.ticker__item');
+
 swipeAreas.forEach(area => {
     var hammer = new Hammer(area);
     hammer.on('swipeleft swiperight', function(e) {
@@ -430,6 +480,7 @@ swipeAreas.forEach(area => {
     });
 });
 </script>
+
 
 </body>
 </html>
