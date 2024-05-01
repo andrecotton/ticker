@@ -2,24 +2,9 @@
 <html>
 <head>
 
-<meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0"/> <meta name="apple-mobile-web-app-capable" content="yes" /> <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"> <link rel="apple-touch-icon" href="icon.png"/> <link rel="apple-touch-startup-image" href="startup.png" />
-
-	<!-- iPhone Xr (828px x 1792px) --> 
-<link rel="apple-touch-startup-image" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2)" href="/apple-launch-828x1792.png">
-<!-- iPhone X (1125px x 2436px) -->
-<link rel="apple-touch-startup-image" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)" href="/apple-launch-1125x2436.png">
-<!-- iPhone 8, 7, 6s, 6 (750px x 1334px) -->
-<link rel="apple-touch-startup-image" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)" href="/apple-launch-750x1334.png">
-<!-- iPhone 8 Plus, 7 Plus, 6s Plus, 6 Plus (1242px x 2208px) -->
-<link rel="apple-touch-startup-image" media="(device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3)" href="/apple-launch-1242x2208.png">
-<!-- iPhone 5 (640px x 1136px) -->
-<link rel="apple-touch-startup-image" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)" href="/apple-launch-640x1136.png">
-<!-- iPad Mini, Air (1536px x 2048px) -->
-<link rel="apple-touch-startup-image" media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2)" href="/apple-launch-1536x2048.png">
-<!-- iPad Pro 10.5" (1668px x 2224px) -->
-<link rel="apple-touch-startup-image" media="(device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2)" href="/apple-launch-1668x2224.png">
-<!-- iPad Pro 12.9" (2048px x 2732px) -->
-<link rel="apple-touch-startup-image" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2)" href="/apple-launch-2048x2732.png">
+<meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+<meta name="apple-mobile-web-app-capable" content="yes" /> <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="apple-touch-icon" href="icon.png"/> <link rel="apple-touch-startup-image" href="startup.png" />
 
     <title>Buenas</title>
     <style>
@@ -64,22 +49,27 @@ body {
             justify-content: center;
             align-items: center;
             height: 100vh;
-	background-color: #D5E9F3;
+	background-color: #ffffff;
         }
 
 	strong {
-	    color: #3a6be3
+	    color: #2257da;
 	}
 
 	a {
 	    text-decoration: none;
+      color: #2257da;
+      &:hover,
+  		&:focus {
+  			color: #fff;
+      }
 	}
 
         .ticker-wrap {
 /*            overflow: hidden;*/
             width: 90%;
             height: 30rem;
-            background-color: #D5E9F3;
+            background-color: #ffffff;
 	    color: #373737;
             position: relative;
             display: flex;
@@ -93,27 +83,41 @@ body {
 
 /* Card styling adapted for ticker items */
 .ticker__item {
-    /* Card appearance */
-    background-color: #fff;
+    position: relative;
+    background-color: #fff; /* Fallback background color */
     border-radius: 16px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     margin: 1rem;
     overflow: hidden;
     padding: 20px;
     font-family: "Spline Sans", sans-serif;
-height: 30rem;
-    /* Layout adjustments for the ticker */
-    display: flex; /* Changed from flex to block */
-    width: auto; /* Adjust width as needed */
-    margin-bottom: 2rem; /* Space between cards */
+    height: 30rem;
+    display: flex;
+    flex-direction: column;
+    width: auto;
+    margin-bottom: 2rem;
+}
+
+.background-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    filter: blur(1px) grayscale(100%) opacity(20%);
+    z-index: 0; /* Ensure it's behind the content */
 }
 
 .ticker__item-content {
-    overflow: hidden;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 10rem; /* Adjust number of lines based on your design */
+    position: relative;
+    z-index: 2; /* Higher than the background to ensure content is not affected by the filter */
+    width: 100%;
 }
+
+
 
 a {
     align-self: left; /* Ensure link is always visible and left */
@@ -175,71 +179,49 @@ a {
     cursor: pointer;
 }
 
-#control-buttons {
-    position: fixed;
-    bottom: 20px;
-    left: 20px;
-    z-index: 101; /* Ensure it's above other elements */
-}
-
-#control-buttons button {
-    color: #696969; /* Color of the links */
-    background-color: transparent;
-    padding: 5px 10px;
-    margin-right: 5px;
-    cursor: pointer;
-    font-family: monaco, sans-serif;
-	font-size: 2rem;
-    border: none;
-}
-
-#control-buttons button:hover {
-    background-color: #696969;
-    color: white;
-}
-
-
-
 .information {
+  position: relative;
+  		z-index: 2;
 	background-color: var(--c-white);
 	padding: 1.5rem;
+	position: relative;
+	overflow: hidden; /* Ensures the background does not spill outside the boundaries of the card */
+}
 
 	.tag {
+		position: relative;
+		z-index: 2;
 		display: inline-block;
-		background-color: #f1eeff;
-		color: var(--c-indigo);
+		background-color: #2257da;
+		color: #ffffff;
 		font-weight: 600;
 		font-size: 0.875rem;
 		padding: 0.5em 0.75em;
 		line-height: 1;
 		border-radius: 6px;
-		& + * {
-			margin-top: 1rem;
-		}
+	}
+
+	.title, .info, .button {
+		position: relative;
+		z-index: 2;
 	}
 
 	.title {
 		font-size: 1.5rem;
 		color: var(--c-void);
 		line-height: 1.25;
-		& + * {
-			margin-top: 1rem;
-		}
 	}
 
 	.info {
-		color: var(--c-charcoal);
-		& + * {
-			margin-top: 1.25rem;
-		}
+		color: #000;
 	}
 
 	.button {
 		font: inherit;
 		line-height: 1;
-		background-color: var(--c-white);
-		border: 2px solid var(--c-indigo);
-		color: var(--c-indigo);
+		background-color: #ffffff;
+		border: 2px solid #2257da;
+		color: #2257da;
 		padding: 0.5em 1em;
 		border-radius: 6px;
 		font-weight: 500;
@@ -247,144 +229,7 @@ a {
 		align-items: center;
 		justify-content: space-between;
 		gap: 0.5rem;
-		&:hover,
-		&:focus {
-			background-color: var(--c-indigo);
-			color: #fff;
-		}
 	}
-	
-	.details {
-		display: flex;
-		gap: 1rem;
-		div {
-			padding: .75em 1em;
-			background-color: var(--c-titan-white);
-			border-radius: 8px;
-			display: flex;
-			flex-direction: column-reverse;
-			gap: .125em;
-			flex-basis: 50%;
-		}
-		
-		dt {
-			font-size: .875rem;
-			color: var(--c-cold-purple);
-		}
-		
-		dd {
-			color: var(--c-indigo);
-			font-weight: 600;
-			font-size: 1.25rem;
-		}
-	}
-}
-
-
-.plan {
-	padding: 10px;
-	background-color: var(--c-white);
-	color: var(--c-del-rio);
-	
-	strong {
-		font-weight: 600;
-		color: var(--c-coffee);
-	}
-	
-	.inner {
-		padding: 20px;
-		padding-top: 40px;
-		background-color: var(--c-fair-pink);
-		border-radius: 12px;
-	position: relative;
-		overflow: hidden;
-	}
-	
-	.pricing {
-		position: absolute;
-		top: 0;
-		right: 0;
-		background-color: var(--c-apricot);
-		border-radius: 99em 0 0 99em;
-		display: flex;
-		align-items: center;
-		padding: .625em .75em;
-		font-size: 1.25rem;
-		font-weight: 600;
-		color: var(--c-coffee);
-		small {
-			color: var(--c-del-rio);
-			font-size: .75em;
-			margin-left: .25em;
-		}
-		
-	}
-	
-	.title {
-		font-weight: 600;
-		font-size: 1.25rem;
-		color: var(--c-coffee);
-		& + * {
-			margin-top: .75rem;
-		}
-	}
-	
-	.info {
-		& + * {
-			margin-top: 1rem;
-		}
-	}
-	
-	.features {
-		display: flex;
-		flex-direction: column;
-		li {
-			display: flex;
-			align-items: center;
-			gap: .5rem;
-			& + * {
-				margin-top: .75rem;
-			}
-		}
-		
-		.icon {
-			background-color: var(--c-java);
-			display: inline-flex;
-			align-items: center;
-			justify-content: center;
-			color: var(--c-white);
-			border-radius: 50%;
-			width: 20px;
-			height: 20px;
-			svg {
-				width: 14px;
-				height: 14px;
-			}
-		}
-		
-		& + * {
-			margin-top: 1.25rem;
-		}
-	}
-	
-	button {
-		font: inherit;
-		background-color: var(--c-indigo);
-		border-radius: 6px;
-		color: var(--c-white);
-		font-weight: 500;
-		font-size: 1.125rem;
-		width: 100%;
-		border: 0;
-		padding: 1em;
-		&:hover,
-		&:focus {
-			background-color: var(--c-governor);
-			color: var(--c-white);
-		}
-	}
-	
-
 }
 
 
@@ -400,9 +245,22 @@ a {
 </div>
 
 <div id="settings-menu"><br><br>
-    <strong>Select News Feeds</strong>
-    <div id="feed-selectors"></div>
-    <button onclick="fetchSelectedFeeds()">Refresh Feeds</button>
+    <button onclick="toggleDarkMode()">Toggle Light/Dark Mode</button>
+    <button onclick="increaseFontSize()">Increase Font Size</button>
+    <button onclick="decreaseFontSize()">Decrease Font Size</button>
+    <hr>
+    <div>Categories:</div>
+    <label><input type="checkbox" class="category" value="news" checked> News</label><br>
+    <label><input type="checkbox" class="category" value="technology" checked> Technology</label><br>
+    <label><input type="checkbox" class="category" value="worldnews" checked> World News</label><br>
+    <label><input type="checkbox" class="category" value="europe"> Europe</label><br>
+    <label><input type="checkbox" class="category" value="foodforthought"> Food for Thought</label><br>
+    <label><input type="checkbox" class="category" value="foodnews"> Food News</label><br>
+    <label><input type="checkbox" class="category" value="formula1"> Formula 1</label><br>
+    <label><input type="checkbox" class="category" value="stocks"> Stocks</label><br>
+    <label><input type="checkbox" class="category" value="noticias_en_espanol"> Noticias en Español</label><br>
+    <label><input type="checkbox" class="category" value="upliftingnews+goodnews+positive_news"> Good News :)</label><br>
+    <!-- Add other categories as needed -->
 </div>
 
 <div class="ticker-wrap">
@@ -410,173 +268,95 @@ a {
 </div>
 
 <div id="footer">
-<div id="control-buttons">
-    <button id="move-up-button">&#11014;</button>
-    <button id="move-down-button">&#11015;</button>
-    <button id="pause-button">&#9208;&#65039;</button>
-    <button id="play-button" style="display:none;">&#9654;&#65039;</button>
-</div>
 </div>
 
 <script>
 
-let touchStartY = 0;
-let touchEndY = 0;
-
 // Using a publicly available CORS proxy
 const CORS_PROXY = "https://cors-anywhere.herokuapp.com/";
 const feeds = [
-    { url: "https://feeds.bbci.co.uk/news/world/rss.xml", name: "BBC World" },
-    { url: "https://www.nytimes.com/svc/collections/v1/publish/http://www.nytimes.com/section/world/rss.xml", name: "NY Times World" },
-    { url: "https://feeds.skynews.com/feeds/rss/world.xml", name: "Sky News World" }
+    "https://www.reddit.com/r/technology+worldnews+europe+foodforthought+foodnews+formula1+news+stocks.rss?limit=100", // Reddit technology for key 1
+    "https://www.reddit.com/r/worldnews.rss?limit=100", // Placeholder URL for feed 2
+    "https://example.com/rss/feed3", // Add your actual feed URLs for keys 2-9
+    "https://example.com/rss/feed4",
+    "https://example.com/rss/feed5",
+    "https://example.com/rss/feed6",
+    "https://example.com/rss/feed7",
+    "https://example.com/rss/feed8",
+    "https://example.com/rss/feed9"
 ];
-
-document.getElementById('feed-selectors').innerHTML = feeds.map((feed, index) =>
-    `<label><input type="checkbox" class="feed-checkbox" checked data-feed="${feed.url}" id="feed${index}"> ${feed.name}</label><br>`
-).join('');
-
 var tickerElement = document.getElementById('ticker');
 
-function fetchFeed(url) {
-    const CORS_PROXY = "https://cors-anywhere.herokuapp.com/";
-    return fetch(`${CORS_PROXY}${url}`)
+function fetchFeed(feedIndex) {
+    // Construct the base RSS URL dynamically based on selected categories
+    let baseRSS = "https://www.reddit.com/r/";
+    const selectedCategories = document.querySelectorAll('.category:checked');
+    let categoryString = '';
+    selectedCategories.forEach((checkbox, index) => {
+        categoryString += checkbox.value + (index < selectedCategories.length - 1 ? '+' : '');
+    });
+
+    const now = new Date().getTime(); // Cache buster
+    const RSS_URL = baseRSS + categoryString + ".rss?limit=99&t=" + now; // Append selected categories and cache buster
+
+    fetch(`${CORS_PROXY}${RSS_URL}`)
         .then(response => response.text())
-        .then(str => new window.DOMParser().parseFromString(str, "application/xml"));
+        .then(str => new window.DOMParser().parseFromString(str, "text/xml"))
+        .then(data => {
+            const entries = data.querySelectorAll("entry");
+            let html = '';
+            entries.forEach(entry => {
+                // Extract the category term, make it uppercase and bold
+                const categoryTerm = entry.querySelector("category").getAttribute("term").toUpperCase();
+                const title = entry.querySelector("title").textContent;
+                const contentHtml = entry.querySelector("content").textContent;
+                const publishedDate = entry.querySelector("published").textContent; // Getting the published date
+                const parser = new DOMParser();
+                const htmlDoc = parser.parseFromString(contentHtml, 'text/html');
+
+                // Extract image URL from the content
+                const img = htmlDoc.querySelector('img');
+                const imgUrl = img ? img.src : '';
+
+                const links = htmlDoc.querySelectorAll("a");
+                let directLink = '';
+                let sourceName = 'Source';
+                Array.from(links).forEach(link => {
+                    const href = link.getAttribute('href');
+                    if (href && !href.includes('reddit.com')) {
+                        directLink = href;
+                        const url = new URL(href);
+                        sourceName = url.hostname.replace('www.', ''); // Extract hostname without 'www'
+                        sourceName = sourceName.toUpperCase();
+                        return;
+                    }
+                });
+
+                // Append to HTML with image if available
+                html += `
+                <div class="ticker__item">
+                    <div class="background-image" style="background-image: url('${imgUrl}');"></div>
+                    <article class="information [ card ]">
+                        <span class="tag">${categoryTerm}</span>
+                        <p class="info">${new Date(publishedDate).toLocaleDateString()} - ${sourceName}</p>
+                        <h2 class="title">${title}</h2>
+                        <button class="button">
+                            <span>
+                                <a href="${directLink}" target="_blank">Read more</a>
+                            </span>
+                        </button>
+                    </article>
+                </div>
+                `;
+
+              });
+            tickerElement.innerHTML = html; // Insert the formatted HTML into the ticker element
+        })
+        .catch(error => console.error('Error fetching or processing the RSS feed:', error));
 }
-
-function displayFeeds() {
-    const selectedFeeds = Array.from(document.querySelectorAll('.feed-checkbox:checked')).map(checkbox => ({
-        url: checkbox.getAttribute('data-feed'),
-        name: checkbox.nextSibling.textContent.trim()
-    }));
-    const feedPromises = selectedFeeds.map(feed => fetchFeed(feed.url).then(data => ({ data, name: feed.name })));
-
-    Promise.all(feedPromises).then(results => {
-        let itemsHtml = results.flatMap(result => [...result.data.querySelectorAll('item')].map(item => {
-            const title = item.querySelector('title').textContent;
-            const link = item.querySelector('link').textContent;
-            const description = item.querySelector('description').textContent;
-            return `<div class="ticker__item"><article class="information [ card ]"><span class="tag">${result.name}</span><h2 class="title">${title}</h2><p class="info">${description}</p><button class="button"><span><a href="${link}" target="_blank">Read more</a></span></button></article></div>`;
-        })).join('');
-
-        document.getElementById('ticker').innerHTML = itemsHtml;
-        animateTicker();
-    }).catch(err => console.error('Error fetching or processing the RSS feeds:', err));
-}
-
-function fetchSelectedFeeds() {
-    displayFeeds(); // Initially load selected feeds
-}
-
-// Initial fetch
-fetchSelectedFeeds();
-
-let animationInterval;
-let isPaused = false;
-
-function animateTicker() {
-    const items = document.querySelectorAll('.ticker__item');
-    let currentIndex = 0;
-
-    const moveUp = () => {
-        if (currentIndex < items.length) {
-            const nextItemHeight = getNextItemHeight(items, currentIndex);
-            const currentTranslateY = calculateTotalHeight(items, currentIndex);
-            tickerElement.style.transform = `translateY(-${currentTranslateY}px)`;
-            tickerElement.style.transition = `transform 0.7s cubic-bezier(0.4, 0.0, 0.2, 1)`;
-            currentIndex++;
-        } else {
-            // Reset animation without seeing the transition
-            tickerElement.style.transition = 'none';
-            tickerElement.style.transform = `translateY(0)`;
-            tickerElement.offsetHeight; // Trigger reflow
-            currentIndex = 1; // Set to start from the second item next interval
-        }
-    };
-
-    clearInterval(animationInterval);
-    animationInterval = setInterval(moveUp, 6000);
-}
-
-function calculateTotalHeight(items, index) {
-    let totalHeight = 0;
-    for (let i = 0; i <= index; i++) {
-        totalHeight += items[i].clientHeight + (i < index ? parseInt(window.getComputedStyle(items[i]).marginBottom) : 0);
-    }
-    return totalHeight;
-}
-
-function getNextItemHeight(items, currentIndex) {
-    if (currentIndex + 1 < items.length) {
-        return items[currentIndex + 1].clientHeight;
-    }
-    return 0;
-}
-
-
-function pauseAnimation() {
-    clearInterval(animationInterval);
-    document.getElementById('pause-button').style.display = 'none';
-    document.getElementById('play-button').style.display = '';
-    isPaused = true;
-}
-
-function resumeAnimation() {
-    if (isPaused) {
-        animateTicker(); // Resume animation
-        document.getElementById('pause-button').style.display = '';
-        document.getElementById('play-button').style.display = 'none';
-        isPaused = false;
-    }
-}
-
-document.getElementById('pause-button').addEventListener('click', pauseAnimation);
-document.getElementById('play-button').addEventListener('click', resumeAnimation);
-
-// Start the animation initially
-animateTicker();
-
-
 
 
 fetchFeed(0);
-
-//script to add keyboard adjustments
-document.addEventListener('keydown', function(event) {
-  const ticker = document.querySelector('.ticker');
-  const tickerItems = document.querySelectorAll('.ticker__item');
-  let currentDuration = parseFloat(window.getComputedStyle(ticker, null).animationDuration.replace("s", ""));
-  let currentFontSize = parseFloat(window.getComputedStyle(tickerItems[0], null).fontSize.replace("px", ""));
-  
-  switch(event.key.toLowerCase()) {
-    case 'a': // Slows down the animation
-      ticker.style.animationDuration = `${currentDuration + 50}s`;
-      break;
-    case 'd': // Speeds up the animation
-      ticker.style.animationDuration = `${Math.max(10, currentDuration - 50)}s`; // Prevent negative duration
-      break;
-    case 's': // Decrease font size
-      tickerItems.forEach(item => {
-        item.style.fontSize = `${Math.max(0.2, currentFontSize - 2)}px`; // Prevent too small font size
-      });
-      break;
-    case 'w': // Increase font size
-      tickerItems.forEach(item => {
-        item.style.fontSize = `${currentFontSize + 2}px`;
-      });
-      break;
-    case 'e': // Toggle dark mode
-      document.body.classList.toggle('dark-mode');
-      break;
-  }
-
-    if (event.key >= '1' && event.key <= '9') {
-        const feedIndex = parseInt(event.key, 10) - 1; // Convert key to feed index
-        if (feeds[feedIndex]) { // Check if the feed exists
-            fetchFeed(feedIndex); // Fetch the selected feed
-        }
-    }
-});
 
 document.addEventListener('keydown', function(event) {
     // Check if the '/' key is pressed
@@ -608,7 +388,7 @@ function fetchCustomFeed(newRssUrl) {
       const parser = new DOMParser();
       const htmlDoc = parser.parseFromString(contentHtml, 'text/html');
       const links = htmlDoc.querySelectorAll("a");
-      
+
       let directLink = '';
       let sourceName = 'Source';
       Array.from(links).forEach(link => {
@@ -625,7 +405,6 @@ function fetchCustomFeed(newRssUrl) {
       html += `<div class="ticker__item"><article class="information [ card ]"><span class="tag">${categoryTerm}</span><h2 class="title">${title}</h2><p class="info"></p><button class="button"><span><a href="${directLink}" target="_blank">Read more at ${sourceName}</a></span></button></article></div>`;
     });
     tickerElement.innerHTML = html; // Insert the formatted HTML into the ticker element
-        animateTicker();
   })
   .catch(error => console.error('Error fetching or processing the RSS feed:', error));
 }
@@ -667,18 +446,6 @@ function decreaseFontSize() {
     });
 }
 
-function increaseSpeed() {
-    const ticker = document.querySelector('.ticker');
-    let currentDuration = parseFloat(window.getComputedStyle(ticker, null).animationDuration.replace("s", ""));
-    ticker.style.animationDuration = `${Math.max(10, currentDuration - 5)}s`;
-}
-
-function decreaseSpeed() {
-    const ticker = document.querySelector('.ticker');
-    let currentDuration = parseFloat(window.getComputedStyle(ticker, null).animationDuration.replace("s", ""));
-    ticker.style.animationDuration = `${currentDuration + 5}s`;
-}
-
 // Listen for changes in category selection and refetch the feed
 document.querySelectorAll('.category').forEach(checkbox => {
     checkbox.addEventListener('change', () => fetchFeed(0)); // Assuming feedIndex 0 is for the dynamic category feed
@@ -693,46 +460,26 @@ document.querySelector('.ticker-wrap').addEventListener('touchend', function(e) 
     handleTouchMove();
 }, false);
 
-function handleTouchMove() {
-    if (touchEndY < touchStartY) {
-        moveForward();
-    }
-    if (touchEndY > touchStartY) {
-        moveBackward();
-    }
-}
-
-function moveForward() {
-    // Guard clause to prevent moving forward past the last item
-    if (currentIndex >= document.querySelectorAll('.ticker__item').length) return;
-    
-    currentIndex++; // Move to next item
-    updateTickerPosition(); // Update position immediately
-}
-
-function moveBackward() {
-    // Guard clause to prevent moving backward before the first item
-    if (currentIndex <= 1) return;
-    
-    currentIndex--; // Move to previous item
-    updateTickerPosition(); // Update position immediately
-}
-
-function updateTickerPosition() {
-    clearInterval(animationInterval); // Stop the automatic animation
-    const items = document.querySelectorAll('.ticker__item');
-    const translateYValue = -(currentIndex - 1) * items[0].clientHeight;
-    tickerElement.style.transition = 'transform 0.7s cubic-bezier(0.4, 0.0, 0.2, 1)';
-    tickerElement.style.transform = `translateY(${translateYValue}px)`;
-    // Optionally, restart the animation after a delay
-    setTimeout(() => animateTicker(), 1000); // Restart the animation with a slight delay
-}
-
-document.getElementById('move-up-button').addEventListener('click', moveBackward);
-document.getElementById('move-down-button').addEventListener('click', moveForward);
-
 </script>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js"></script>
+
+<script>
+var swipeAreas = document.querySelectorAll('.ticker__item');
+
+swipeAreas.forEach(area => {
+    var hammer = new Hammer(area);
+    hammer.on('swipeleft swiperight', function(e) {
+        if (e.type === 'swipeleft') {
+            area.style.transform = 'translateX(-100%)'; // Swipe left
+        } else {
+            area.style.transform = 'translateX(100%)'; // Swipe right
+        }
+        area.style.transition = 'transform 0.3s ease-in-out';
+        setTimeout(() => area.remove(), 300); // Remove after transition
+    });
+});
+</script>
 
 
 </body>
